@@ -4,13 +4,14 @@ import com.google.gson.JsonParser;
 import main.java.TMDBHelper;
 import org.junit.Test;
 import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 
-public class FindEndpointTestRunner {
+public class FindEndpointTest {
 //    String message = "Hello World";
-    TMDBHelper helper = new TMDBHelper();
-    String apiKey = "05808d165011b4774cd3dbef69ade85e";
-    Find findRequest;
+    private TMDBHelper helper = new TMDBHelper();
+    private String apiKey = "";
+    private Find findRequest;
 
     private void sendFindRequest(String id, String externalSource) throws IOException {
         String stringURL = "https://api.themoviedb.org/3/find/" + id + "?api_key=" + apiKey + "&language=en-US&external_source=" + externalSource;
@@ -28,7 +29,16 @@ public class FindEndpointTestRunner {
         String jsonResponseText = helper.getJsonAsString(stringURL, 10000);
 
         assertEquals("An incorrect API key should return a 401 status", "401", jsonResponseText);
+    }
 
+    @Test
+    //This test should be in a separate test class that just tests the returned status because it
+    //isn't unique to the Find endpoint
+    public void pageNotFound() throws IOException {
+        String stringURL = "https://api.themoviedb.org/3/finds/" + "nm0413168" + "?api_key=" + apiKey + "&language=en-US&external_source=" + "imdb_id";
+        String jsonResponseText = helper.getJsonAsString(stringURL, 10000);
+
+        assertEquals("An incorrect Endpoint should return a 404 status", "404", jsonResponseText);
     }
 
     @Test
@@ -46,7 +56,7 @@ public class FindEndpointTestRunner {
     //If I were actually testing this API I would ask the developers if the Dr. Who behavior is correct or if the various ids
     //should be unique and only one result should be returned per ID.  If the behavior is in fact a bug then I would log the bug and
     //modify this test to fail until the bug is fixed.
-    public void findSeriesResultsByTheTvdbIdReturnsCorrectName() throws IOException {
+    public void findEpisodeResultsByTheTvdbIdReturnsCorrectName() throws IOException {
 
         String tv_results_expected_string = "\"아는 형님\""; //tv_results
         String expectedEpisodeName = "\"The Christmas Invasion\"";
@@ -76,74 +86,52 @@ public class FindEndpointTestRunner {
 
     }
 
-//    @Test
-//    public void findByImdbIdNumber() throws IOException {
-//        String imdbID = "nm0413168";// "tt0098798";
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create(); //should do pretty print now.
-//        URL url = new URL("https://api.themoviedb.org/3/find/" + imdbID + "?api_key=" + apiKey + "&language=en-US&external_source=imdb_id");
-//        String stringURL = "https://api.themoviedb.org/3/find/" + imdbID + "?api_key=" + apiKey + "&language=en-US&external_source=imdb_id";
-//
-//        //I don't really need all of this because the tmdbhelper does it all for me a returns a string, which I can then parse.
-////        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-////        httpURLConnection.setDoOutput(true);
-////        httpURLConnection.setRequestMethod("GET");
-////        httpURLConnection.setRequestProperty("Content-Type", "application/json");
-////        httpURLConnection.connect();
-////        httpURLConnection.getResponseCode();
-//
-//        String text = helper.getJsonAsString(stringURL, 10000);
-//
-//        JsonParser parser = new JsonParser();
-//
-////        String json = "{ \"f1\":\"Hello\",\"f2\":{\"f3:\":\"World\"}}";
-//
-//        JsonElement jsonTree = parser.parse(text);
-//        JsonObject jobj = jsonTree.getAsJsonObject();
-////        jobj.get("tv_results").getAsJsonArray().get(0).getAsJsonObject().get("original_name")
-//
-//        Map<String, Object> retMap = new Gson().fromJson(text, new TypeToken<HashMap<String, Object>>() {}.getType());
-//
-//        retMap.get("tv_results");
-//
-//
-//
-//
-//        String json = text;
-//
-//        JsonReader jsonReader = new JsonReader(new StringReader(json));
-//
-//        try {
-//            while(jsonReader.hasNext()){
-//                JsonToken nextToken = jsonReader.peek();
-//                System.out.println(nextToken);
-//
-//                if(JsonToken.BEGIN_OBJECT.equals(nextToken)){
-//
-//                    jsonReader.beginObject();
-//
-//                } else if(JsonToken.NAME.equals(nextToken)){
-//
-//                    String name  =  jsonReader.nextName();
-//                    System.out.println(name);
-//
-//                } else if(JsonToken.STRING.equals(nextToken)){
-//
-//                    String value =  jsonReader.nextString();
-//                    System.out.println(value);
-//
-//                } else if(JsonToken.NUMBER.equals(nextToken)){
-//
-//                    long value =  jsonReader.nextLong();
-//                    System.out.println(value);
-//
-//                }
-//                else if (JsonToken.BEGIN_ARRAY.equals(nextToken)){
-//                    jsonReader.beginArray();
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+    @Test
+    public void findMovieResultsByImdbIdReturnsCorrectName(){
+        //TODO: Use the IMDB id of a movie and query themoviedb then verify that the correct movie is return.
+    }
+
+    @Test
+    public void findMovieResultsByTheTvdbIdReturnsCorrectName(){
+        //TODO: Use the thetvdb id of a movie and query themoviedb then verify that the correct movie is return.
+    }
+
+    @Test
+    public void findSeasonResultsByImdbIdReturnsCorrectName(){
+        //TODO: Use the IMDB id of a tv series Season and query themoviedb then verify that the correct movie is return.
+    }
+
+    @Test
+    public void findSeasonResultsByTheTvdbIdReturnsCorrectName(){
+        //TODO: Use the thetvdb id of a tv series Season and query themoviedb then verify that the correct movie is return.
+    }
+
+    @Test
+    public void findEpisodeResultsByTheTvdbIdReturnsValidTheMovieDbId(){
+        //TODO: Use the thetvdb id of a tv episode and query themoviedb then verify that the
+        // returned id can be used in a "tv/get-tv-details" query and the correct
+        //information about the show is returned
+    }
+
+    @Test
+    public void findEpisodeResultsByImdbIdReturnsValidTheMovieDbId(){
+        //TODO: Use the imdb id of a tv episode and query themoviedb then verify that the
+        // returned id can be used in a "tv/get-tv-details" query and the correct
+        //information about the show is returned
+    }
+
+    @Test
+    public void facebookMovieIdReturnsCorrectMovie(){
+        //TODO: Get a facebook movie ID and verify that it returns the correct movie
+    }
+
+    @Test
+    public void twitterPersonIdReturnsCorrectPerson(){
+        //TODO: Get a Twitter person ID and verify that it returns the correct person
+    }
+
+    @Test
+    public void instagramTvShowIdReturnsCorrectTvShow(){
+        //TODO: Get an Instagram TV Show ID and verify that it returns the correct TV Show
+    }
 }

@@ -42,6 +42,8 @@ public class TMDBHelper {
                     return sb.toString();
                 case 401:
                     return  String.valueOf(status);
+                case 404:
+                    return  String.valueOf(status);
             }
 
         }

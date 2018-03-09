@@ -4,8 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+/*
+With more time I would look at all the endpoints and see what they have in common and move that functionality into a parent class or a template for
+all of them to extend or implement.
+
+I could make the methods here protected, but I decided to go with public.
+*/
+
 public class Find {
-    JsonObject jsonObject;
+    private JsonObject jsonObject;
 
     public Find(JsonElement jsonElement){
         this.jsonObject = jsonElement.getAsJsonObject();
@@ -29,14 +36,5 @@ public class Find {
         else{
             return array.get(index).getAsJsonObject().get(fieldName).toString();
         }
-//        return getResultsArray(resultSection).get(index).getAsJsonObject().get(fieldName).toString();
     }
-
-    //jobj.get("tv_results").getAsJsonArray().get(0).isJsonObject()
-
-//    {"movie_results":[],
-//        "person_results":[],
-//        "tv_results":[{"original_name":"The Flash","id":236,"name":"The Flash","vote_count":19,"vote_average":6.6,"first_air_date":"1990-09-20","poster_path":"/abxIKXvwtNByR5DuYs7M0cIXjWo.jpg","genre_ids":[80,18,10759,10765],"original_language":"en","backdrop_path":"/3JPFgvsnZfYsb6NPqlxdXK8RmgH.jpg","overview":"The Flash is a 1990 American television series that starred John Wesley Shipp as the superhero, the Flash, and co-starred Amanda Pays. The series was developed from the DC Comics characters by the writing team of Danny Bilson and Paul De Meo, and produced by their company, Pet Fly Productions, in association with Warner Bros. Television. Composer Danny Elfman wrote the show’s title theme, and Stan Winston Studios built the costume.","origin_country":["US"]}],
-//        "tv_episode_results":[],
-//        "tv_season_results":[]}
 }
