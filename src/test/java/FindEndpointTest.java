@@ -3,12 +3,12 @@ package test.java;
 import com.google.gson.JsonParser;
 import main.java.TMDBHelper;
 import org.junit.Test;
+
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 public class FindEndpointTest {
-//    String message = "Hello World";
     private TMDBHelper helper = new TMDBHelper();
     private String apiKey = "";
     private Find findRequest;
@@ -52,13 +52,13 @@ public class FindEndpointTest {
 
     @Test
     //This test is valid for the behavior shown on https://developers.themoviedb.org, but I tried looking for an episode of the big bang theory
-    //using a tvdb id and it did not return tv_results or tv_season_results, just tv_episode results, which makes more sense to me.
+    //using a tvdb id and it did not return tv_results nor tv_season_results, just tv_episode results, which makes more sense to me.
     //If I were actually testing this API I would ask the developers if the Dr. Who behavior is correct or if the various ids
     //should be unique and only one result should be returned per ID.  If the behavior is in fact a bug then I would log the bug and
     //modify this test to fail until the bug is fixed.
     public void findEpisodeResultsByTheTvdbIdReturnsCorrectName() throws IOException {
 
-        String tv_results_expected_string = "\"아는 형님\""; //tv_results
+        String tvResultsExpectedName = "\"아는 형님\""; //tv_results
         String expectedEpisodeName = "\"The Christmas Invasion\"";
         String expectedSeasonName = "\"Season 1\"";
 
@@ -69,7 +69,7 @@ public class FindEndpointTest {
         String actualSeasonName = findRequest.getFieldValueAsString("tv_season_results", 0, "name");
 
         assertEquals("searching for an episode of Doctor Who should not return a person", 0, findRequest.getResultsArray("person_results").size());
-        assertEquals("Episode IDs on TVDB are not unique from show IDs therefore I expect to get back a result for some Korean game show :)",tv_results_expected_string, actualTvResultName );
+        assertEquals("Episode IDs on TVDB are not unique from show IDs therefore I expect to get back a result for some Korean game show :)",tvResultsExpectedName, actualTvResultName );
         assertEquals("The overview should equal this string: " + expectedEpisodeName, actualTvEpisodeResultsName, expectedEpisodeName);
         assertEquals("The Season name should be 'Season 1'", expectedSeasonName, actualSeasonName);
     }
@@ -83,7 +83,6 @@ public class FindEndpointTest {
         String actualFieldText = findRequest.getFieldValueAsString("tv_results", 0, "overview");
 
         assertEquals("The overview should equal this string: " + expectedOverviewText, actualFieldText, expectedOverviewText);
-
     }
 
     @Test
